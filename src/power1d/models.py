@@ -492,7 +492,7 @@ class Experiment(object):
 		return self.fn( *values )
 
 
-	def simulate(self, iterations=1000, progress_bar=True):
+	def simulate(self, iterations=1000, progress_bar=True, progress=None):
 		'''
 		Iteratively simulate a number of experiments.
 		
@@ -505,6 +505,8 @@ class Experiment(object):
 		*iterations* ---- number of iterations to perform (positive int, default 1000)
 		
 		*progress_bar* ---- whether or not to display a progress bar in the terminal (bool, default True)
+		
+		*progress* ---- optional function called as progress(i, iterations) after each iteration (default None)
 		
 		Example:
 		
@@ -543,6 +545,8 @@ class Experiment(object):
 				pbar.update(i)
 			z            = self.simulate_single_iteration()
 			Z.append(z)
+			if progress is not None:
+				progress(i + 1, iterations)
 		### clean up:
 		if progress_bar:
 			pbar.destroy()
@@ -714,7 +718,7 @@ class ExperimentSimulator(object):
 		return dict(nstar=nstar, n=np.array(ns), p=ps, target_power=power, alpha=alpha, coi=coi)
 	
 	
-	def simulate(self, iterations=50, progress_bar=True, two_tailed=False, _qprogressbar=None):
+	def simulate(self, iterations=50, progress_bar=True, two_tailed=False, progress=None, _qprogressbar=None):
 		'''
 		Iteratively simulate a number of experiments.
 		
@@ -728,6 +732,8 @@ class ExperimentSimulator(object):
 		*progress_bar* ---- whether or not to display a progress bar in the terminal (bool, default True)
 
 		*two_tailed* ---- whether or not to use two-tailed inference (bool, default False)
+		
+		*progress* ---- optional function called as progress(i, iterations) after each iteration (default None)
 		
 		Outputs:
 		
@@ -775,6 +781,8 @@ class ExperimentSimulator(object):
 					_qprogressbar.update(i)
 			Z0.append(  self.model0.simulate_single_iteration()  )
 			Z1.append(  self.model1.simulate_single_iteration()  )
+			if progress is not None:
+				progress(i + 1, iterations)
 		### clean up:
 		if progress_bar:
 			pbar.destroy()
