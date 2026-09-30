@@ -71,7 +71,7 @@ class _ContniuumObject(_Power1DObject):
 			s = self._error_prefix(name)
 			assert callable(value), s + 'must be a callable function.'
 			if nargs is not None:
-				assert len( inspect.getargspec(value).args )==nargs, s + 'must accept %d input arguments' %nargs
+				assert len( inspect.signature(value).parameters )==nargs, s + 'must accept %d input arguments' %nargs
 
 	def _assert_function_result(self, d, inputs=(), shape=None):
 		for name,value in d.items():
