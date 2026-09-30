@@ -12,7 +12,6 @@ from math import ceil
 import numpy as np
 ### import internal functions and classes:
 from . _base import _Continuum1D
-from . _plot import DataPlotter, _get_colors
 from . geom import Null
 from . noise import _Noise
 from . results import SimulationResults
@@ -241,9 +240,11 @@ class DataSample(_Noise):
 			plt.close('all')
 			model.plot(color="b", lw=5)
 		'''
+		from . _plot import DataPlotter
 		plotter = DataPlotter(ax)
 		if self.hasregressor:
 			if with_noise:
+				from . _plot import _get_colors
 				colors = _get_colors(self.J, 'magma')
 				for value,c in zip(self.value, colors):
 					plotter.plot( q, value, color=c, lw=1 )
@@ -471,6 +472,7 @@ class Experiment(object):
 			emodel.plot( colors=("k", "r"), q=np.linspace(0, 1, Q) )
 		'''
 		if colors is None:
+			from . _plot import _get_colors
 			colors       = _get_colors( self.nmodels )
 		for m,c in zip(self.data_models, colors):
 			m.plot(ax, with_noise, c, q=q)

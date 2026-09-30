@@ -48,8 +48,6 @@ Example:
 import numpy as np
 from scipy import ndimage
 from . roi import RegionOfInterest
-from . _plot import _plot_results_one_datamodel
-from . _plot import _plot_results_multiple_datamodels
 
 
 def _pkmax(Z, u, k):
@@ -397,6 +395,7 @@ class SimulationResults(object):
 		>>>  Q = results.Q  #continuum size
 		>>>  results.plot( q=np.linspace(0, 1, Q) )
 		'''
+		from . _plot import _plot_results_one_datamodel, _plot_results_multiple_datamodels
 		ndatamodels  = self.model0.nmodels
 		hasregressor = self.model1.data_models[0].hasregressor
 		if ndatamodels==1 and not hasregressor:

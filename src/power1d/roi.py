@@ -60,7 +60,6 @@ will yield more precise convergence to alpha.
 import numpy as np
 from scipy.ndimage import label as scipy_label
 from . _base import _Continuum1D
-from . _plot import DataPlotter
 
 
 
@@ -106,6 +105,7 @@ class RegionOfInterest(_Continuum1D):
 		return scipy_label(self.value)
 
 	def plot(self, ax=None, facecolor='b', edgecolor='b', alpha=0.25, q=None):
+		from . _plot import DataPlotter
 		plotter = DataPlotter(ax)
 		plotter.plot_roi( q, self, facecolor, edgecolor, alpha )
 

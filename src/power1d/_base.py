@@ -10,7 +10,6 @@ Copyright (C) 2023  Todd Pataky
 
 import inspect
 import numpy as np
-from . _plot import DataPlotter
 
 eps  = np.finfo(float).eps
 
@@ -220,6 +219,7 @@ class _ContniuumObject(_Power1DObject):
 			pickle.dump(self, f)
 	
 	def plot(self, ax=None, q=None, *args, **kwdargs):
+		from . _plot import DataPlotter
 		plotter = DataPlotter(ax)
 		return plotter.plot( q, self.value, *args, **kwdargs )
 	
@@ -301,6 +301,7 @@ class _Continuum1D(_ContniuumObject):
 
 
 	def plot(self, ax=None, q=None, *args, **kwdargs):
+		from . _plot import DataPlotter
 		plotter = DataPlotter(ax)
 		return plotter.plot( q, self.value, *args, **kwdargs )
 		
@@ -358,6 +359,7 @@ class Sample1D(_ContniuumObject):
 	
 	
 	def plot(self, ax=None, q=None, *args, **kwdargs):
+		from . _plot import DataPlotter
 		plotter = DataPlotter(ax)
 		return plotter.plot( q, self.value.T, *args, **kwdargs )
 
