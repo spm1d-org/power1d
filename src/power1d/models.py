@@ -11,7 +11,7 @@ import sys,time
 from math import ceil
 import numpy as np
 ### import internal functions and classes:
-from . _base import _Continuum1D
+from . _base import _Continuum1D, _Power1DObject
 from . geom import Null
 from . noise import _Noise
 from . results import SimulationResults
@@ -352,7 +352,7 @@ class DataSample(_Noise):
 
 
 
-class Experiment(object):
+class Experiment(_Power1DObject):
 	'''
 	Experiment model.
 	
@@ -570,7 +570,7 @@ class Experiment(object):
 
 
 
-class ExperimentSimulator(object):
+class ExperimentSimulator(_Power1DObject):
 	'''
 	Two-experiment simulator.
 	

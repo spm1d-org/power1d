@@ -720,6 +720,7 @@ class SignalDependent(_Noise):
 		self._assert_instance( dict(signal=signal), [_Continuum1D] )
 		self._assert_same_shape( dict(noise=noise), dict(signal=signal), withJ=False )
 		### check function definition:
+		self._fn_default = fn is None
 		if fn is None:
 			fn = lambda n,s: n + (n * s)
 		self._assert_callable( dict(fn=fn), nargs=2)

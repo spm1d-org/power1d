@@ -98,6 +98,7 @@ def t_1sample_fn(J):
 	sqrtJ = sqrt( J )
 	def fn(y):
 		return y.mean(axis=0) / (   y.std(ddof=1, axis=0) / sqrtJ   )
+	fn._factory = ('t_1sample_fn', (J,))   # recorded for serialisation
 	return fn
 
 
@@ -173,6 +174,7 @@ def t_2sample_fn(JA, JB):
 		s      = (   ( JA1*sA*sA + JB1*sB*sB )  /  JAB2   )**0.5
 		t      = (mB-mA) / s / sqrt1JA1JB
 		return t
+	fn._factory = ('t_2sample_fn', (JA, JB))   # recorded for serialisation
 	return fn
 
 
@@ -257,6 +259,7 @@ def t_regress_fn(x):
 		s2     = np.diag(R) / df      # variance
 		t      = (c.T @ b)  /   np.sqrt( s2 * cXXc )
 		return t
+	fn._factory = ('t_regress_fn', (x,))   # recorded for serialisation
 	return fn
 	
 	
@@ -365,4 +368,5 @@ def f_anova1_fn(*JJ):
 		# F statistic:
 		f       = ( (np.diag(R0)-np.diag(R)) / v0)   /   ( np.diag(R+eps) / v1 )
 		return f
+	fn._factory = ('f_anova1_fn', JJ)   # recorded for serialisation
 	return fn

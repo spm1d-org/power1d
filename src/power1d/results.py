@@ -47,6 +47,7 @@ Example:
 
 import numpy as np
 from scipy import ndimage
+from . _base import _Power1DObject
 from . roi import RegionOfInterest
 
 
@@ -158,7 +159,7 @@ class SimulationResultsSummary(object):
 
 
 
-class SimulationResults(object):
+class SimulationResults(_Power1DObject):
 	'''
 	A class containing **power1d** simulation results
 	including distributions and derived probabilities.
@@ -208,8 +209,55 @@ class SimulationResults(object):
 			return True
 		except AssertionError:
 			return False
-	
-	
+
+
+	def _to_dict(self):
+		'''
+		Serialisable form: the simulated distributions and the inference settings.
+		The experiment models are included when they can be serialised (None otherwise).
+		'''
+		def model(m):
+			try:
+				return None if m is None else m._to_dict()
+			except ValueError:
+				return None
+		full_roi = bool( np.all(self.roi.value) )
+		return dict(
+			model0     = model(self.model0),
+			model1     = model(self.model1),
+			Z0         = self.Z0.copy(),
+			Z1         = self.Z1.copy(),
+			dt         = float(self.dt),
+			two_tailed = self.two_tailed,
+			alpha      = float(self.alpha),
+			roi        = None if full_roi else np.asarray(self.roi.value, dtype=bool).copy(),
+			coi        = None if self.coi is None else [[int(q), int(r)] for q, r in self.coi],
+			coir       = int(self.coir),
+			poi        = None if self.poi is None else [int(x) for x in self.poi],
+			k          = int(self.k),
+			**{'class': 'SimulationResults'} )
+
+
+	@classmethod
+	def _from_dict_custom(cls, d):
+		from . _serial import from_dict
+		model0  = None if d.get('model0') is None else from_dict(d['model0'])
+		model1  = None if d.get('model1') is None else from_dict(d['model1'])
+		r       = cls(model0, model1, np.asarray(d['Z0']), np.asarray(d['Z1']), d['dt'],
+		              two_tailed=d['two_tailed'], alpha=d['alpha'])
+		r.coir  = d['coir']
+		if d['roi'] is not None:
+			r.set_roi( np.asarray(d['roi'], dtype=bool) )
+		if d['k'] != 1:
+			r.set_cluster_size_threshold( d['k'] )
+		if d['coi'] is not None:
+			r.set_coi( *[tuple(c) for c in d['coi']] )
+		if d['poi'] is not None:
+			r.set_poi( *d['poi'] )
+		r._calculate_probabilities()
+		return r
+
+
 	def __repr__(self):
 		s  = ''
 		s += '------------------------\n'

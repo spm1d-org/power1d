@@ -17,7 +17,13 @@ eps  = np.finfo(float).eps
 
 
 class _Power1DObject(object):
-	pass
+	def _to_dict(self):
+		from . _serial import to_dict
+		return to_dict(self)
+	@staticmethod
+	def _from_dict(d):
+		from . _serial import from_dict
+		return from_dict(d)
 
 
 
