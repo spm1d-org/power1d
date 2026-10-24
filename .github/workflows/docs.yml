@@ -1,0 +1,47 @@
+name: docs
+
+#  Build the documentation and keep the HTML as the workflow artifact
+#  docs-html.  On master, signal spm1d.org so that the site fetches the new
+#  build (needs the secret SITE_DISPATCH_TOKEN;  without it that step is
+#  skipped).
+
+on:
+    push:
+        branches: [ master ]
+    workflow_dispatch:
+
+jobs:
+    build:
+        runs-on: ubuntu-24.04
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v5
+
+            - name: Set up Python
+              uses: actions/setup-python@v6
+              with:
+                  python-version: '3.12'
+
+            - name: Install dependencies
+              run: pip install sphinx sphinxcontrib-youtube spm1d .
+
+            - name: Build
+              run: python -m sphinx -E -a -b html docs/source docs/build/html
+              env:
+                  MPLBACKEND: Agg
+
+            - name: Upload the HTML
+              uses: actions/upload-artifact@v4
+              with:
+                  name: docs-html
+                  path: docs/build/html
+
+            - name: Notify the site
+              if: github.ref == 'refs/heads/master'
+              env:
+                  TOKEN: ${{ secrets.SITE_DISPATCH_TOKEN }}
+              run: |
+                  if [ -z "$TOKEN" ]; then echo "no SITE_DISPATCH_TOKEN; skipped"; exit 0; fi
+                  curl -sS --fail-with-body -X POST -H "Authorization: Bearer $TOKEN" -H "Accept: application/vnd.github+json" \
+                      https://api.github.com/repos/spm1d-org/spm1d.org/dispatches \
+                      -d "{\"event_type\": \"docs-updated\", \"client_payload\": {\"child\": \"power1d\", \"run_id\": \"$GITHUB_RUN_ID\"}}"
