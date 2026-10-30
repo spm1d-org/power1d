@@ -35,7 +35,7 @@ https://peerj.com/articles/cs-125/
 
 **Download**
 
-`Python source code <https://github.com/0todd0000/power1d/archive/master.zip>`_
+`Python source code <https://github.com/spm1d-org/power1d/archive/master.zip>`_
 
 
 |

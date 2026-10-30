@@ -43,7 +43,7 @@ Download
 
 **Download**
 
-`Python source code <https://github.com/0todd0000/power1d/archive/master.zip>`_
+`Python source code <https://github.com/spm1d-org/power1d/archive/master.zip>`_
 
 <br>
 <br>
@@ -61,7 +61,7 @@ Please see the [spm1d.org contributing guidelines and AI policy](https://spm1d.o
 Issues
 ---------
 
-Please report software bugs or other problems by searching existing issues or creating a new issue [here](https://github.com/0todd0000/power1d/issues).
+Please report software bugs or other problems by searching existing issues or creating a new issue [here](https://github.com/spm1d-org/power1d/issues).
 
 <br>
 <br>

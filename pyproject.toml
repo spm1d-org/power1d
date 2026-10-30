@@ -40,8 +40,8 @@ dependencies = [
 
 [project.urls]  # Optional
 "Homepage"    = "https://www.spm1d.org/power1d"
-"Source"      = "https://github.com/0todd0000/power1d"
-"Bug Reports" = "https://github.com/0todd0000/power1d/issues"
+"Source"      = "https://github.com/spm1d-org/power1d"
+"Bug Reports" = "https://github.com/spm1d-org/power1d/issues"
 
 
 
