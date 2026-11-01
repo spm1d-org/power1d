@@ -12,10 +12,10 @@ Copyright (C) 2024  Todd Pataky
 '''
 
 
-__version__ = '0.1.15 (2024-08-11)'
+__version__ = '0.1.16'  # 2026-11-01
 
 
-__all__ = ['geom', 'models', 'noise', 'roi', 'stats']
+__all__ = ['geom', 'models', 'noise', 'roi', 'stats', 'get_config']
 
 
 
@@ -28,6 +28,7 @@ from . import prob
 from . import random
 from . import roi
 from . import stats
+from . _support import get_config
 
 
 DataSample          = models.DataSample
