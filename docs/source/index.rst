@@ -68,6 +68,7 @@ Contents
 	Examples.rst
 	API.rst
 	References.rst
+	support.rst
 
 
 
