@@ -337,7 +337,7 @@ def f_isf(alpha, df, Q, fwhm):
 	*fwhm* ---- continuum smoothness (positive float);  full-width-at-half-maximum
 	'''
 	z0    = stats.f.isf(alpha, df[0], df[1])  #approximate threshold
-	fn    = lambda x : (f_sf(x, df, Q, fwhm) - alpha)**2
+	fn    = lambda x : (f_sf(x[0], df, Q, fwhm) - alpha)**2
 	zstar = optimize.fmin(fn, z0, xtol=1e-9, disp=0)[0]
 	return zstar
 
@@ -357,7 +357,7 @@ def t_isf(alpha, df, Q, fwhm):
 	*fwhm* ---- continuum smoothness (positive float);  full-width-at-half-maximum
 	'''
 	z0    = stats.t.isf(alpha, df)  #approximate threshold
-	fn    = lambda x : (t_sf(x, df, Q, fwhm) - alpha)**2
+	fn    = lambda x : (t_sf(x[0], df, Q, fwhm) - alpha)**2
 	zstar = optimize.fmin(fn, z0, xtol=1e-9, disp=0)[0]
 	return zstar
 	
