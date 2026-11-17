@@ -7,10 +7,9 @@ Data sample modeling
 
 Consider the Canadian temperature dataset in the figure below.  These data are from
 :ref:`Ramsay & Silverman (2005) <label-literature>`
-and are available for download here:
+and are distributed with the R package "fda" as "CanadianWeather":
 
-| http://www.psych.mcgill.ca/misc/fda/downloads/FDAfuns/Matlab/ 
-| The data are in **fdaMatlab.zip** in the **/examples/weather** folder.
+| https://cran.r-project.org/package=fda
 
 
 

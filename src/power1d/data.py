@@ -15,14 +15,14 @@ import numpy as np
 
 def weather():
 	'''
-	| This dataset was made available by Prof. James O. Ramsay
-	  of McGill University. The dataset was download from:
-	| http://www.psych.mcgill.ca/misc/fda/downloads/FDAfuns/Matlab
-	| on 28 March 2017 (see the ./examples/weather directory).
+	Canadian weather dataset from the R package "fda" (version 6.1.9)
+	by James Ramsay, Giles Hooker and Spencer Graves, distributed under
+	the license "GPL (>= 2)":
+	https://cran.r-project.org/package=fda
 
-	The data have been converted from the original form in
-	the "daily.mat" file to numpy format and saved in
-	./power1d/data/weather/daily.npz
+	The data have been converted from "CanadianWeather.rda" to
+	numpy format and saved in
+	./power1d/data/weather/CanadianWeather.npz
 	
 	This is a convenience function for loading those data.
 	
@@ -55,8 +55,9 @@ def weather():
 		plt.plot(y.T, color="k")
 	'''
 	dir0     = os.path.dirname(__file__)
-	fname    = os.path.join(dir0, 'data', 'weather', 'daily.npz')
+	fname    = os.path.join(dir0, 'data', 'weather', 'CanadianWeather.npz')
 	with np.load(fname) as D:
-		z    = dict( **D )
+		y      = D['dailyAv'][:,:,0].T
+		region = D['region']
+	z        = {name: y[region==name]  for name in ('Atlantic', 'Pacific', 'Continental', 'Arctic')}
 	return z
-

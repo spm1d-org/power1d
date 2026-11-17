@@ -46,7 +46,7 @@ dependencies = [
 
 
 [tool.setuptools]
-package-data  = {"power1d.data.weather" = ["*.py", "*.npz", "*.npy", "*.m", "*.mat", "*.txt"]}
+package-data  = {"power1d.data.weather" = ["*.py", "*.npz", "*.npy", "*.rda", "*.txt"]}
 
 
 
