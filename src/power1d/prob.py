@@ -137,6 +137,9 @@ def ec_density_nct(z, v, delta):
 	return np.maximum([ec0, ec1], eps)
 
 
+# Translated from SPM12 spm_ECdensity.m:
+# Copyright (C) 1999-2013 Wellcome Trust Centre for Neuroimaging
+# Karl Friston
 def ec_density_f(z, v, delta=None):
 	'''
 	Euler characteristic density for central F fields.
@@ -163,6 +166,9 @@ def ec_density_f(z, v, delta=None):
 	return np.maximum([ec0, ec1], eps)
 
 
+# Translated from SPM12 spm_ECdensity.m:
+# Copyright (C) 1999-2013 Wellcome Trust Centre for Neuroimaging
+# Karl Friston
 def ec_density_t(z, v, delta=None):
 	'''
 	Euler characteristic density for central t fields.
