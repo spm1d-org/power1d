@@ -43,7 +43,7 @@ Literature
 * Pataky TC (2016). `rft1d: Smooth one-dimensional random field
   upcrossing probabilities in Python
   <http://dx.doi.org/10.18637/jss.v071.i07>`_
-  **Journal of Statistical Software** 71(7): i07.
+  **Journal of Statistical Software** 71(7): 1–22.
 
 * Pataky TC (in review). Power1D: A Python toolbox for numerical power
   estimates in experiments involving one-dimensional continua.

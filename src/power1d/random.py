@@ -17,7 +17,7 @@ http://www.spm1d.org/rft1d
 Reference:
 
 Pataky TC (2016) RFT1D: Smooth One-Dimensional Random Field Upcrossing Probabilities in Python.
-**Journal of Statistical Software** 71(7), 1-22. http://doi.org/10.18637/jss.v071.i07
+**Journal of Statistical Software** 71(7): 1–22. http://doi.org/10.18637/jss.v071.i07
 '''
 
 # Copyright (C) 2023  Todd Pataky

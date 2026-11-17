@@ -39,7 +39,7 @@ REFERENCES
 
 | Joyce KE, Hayasaka S (2012). Development of PowerMap: a Software Package for
   Statistical Power Calculation in Neuroimaging Studies **Neuroinform** 10: 351.
-| http://dx.doi:10.1007/s12021-012-9152-3
+| https://doi.org/10.1007/s12021-012-9152-3
 | PowerMap software:
 | https://sourceforge.net/projects/powermap/
 '''
