@@ -1,7 +1,7 @@
 [![Python](https://img.shields.io/badge/Python-FFD43B?style=for-the-badge&logo=python&logoColor=blue)](https://www.python.org)
 [![Numpy](https://img.shields.io/badge/Numpy-777BB4?style=for-the-badge&logo=numpy&logoColor=white)](https://numpy.org)
 [![Scipy](https://img.shields.io/badge/SciPy-654FF0?style=for-the-badge&logo=SciPy&logoColor=white)](https://scipy.org)
-[![License: GPL-3.0-or-later](https://img.shields.io/badge/License-GPL--3.0--or--later-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![License: GPL-3.0](https://img.shields.io/badge/License-GPL--3.0-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 ![version](https://img.shields.io/badge/version-0.1.18-blue)
 
 power1d
@@ -11,7 +11,7 @@ Numerical power estimates for one-dimensional continua
 
 
 Software documentation:
-[www.spm1d.org/power1d](http://spm1d.org/power1d)
+[spm1d.org/power1d](https://spm1d.org/power1d)
 
 <br>
 
@@ -43,7 +43,7 @@ Download
 
 **Download**
 
-`Python source code <https://github.com/spm1d-org/power1d/archive/master.zip>`_
+[Python source code](https://github.com/spm1d-org/power1d/archive/master.zip)
 
 <br>
 <br>
@@ -72,7 +72,7 @@ License
 
 power1d is a package for numerically estimating statistical power in experiments involving one-dimensional continua.
 
-    Copyright (C) 2023  Todd Pataky
+    Copyright (C) 2026  Todd Pataky
     
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
