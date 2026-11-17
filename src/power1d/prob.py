@@ -5,9 +5,10 @@ and for noncentral t and F fields.
 These calculations come from the random field theory (RFT)
 literature and in particular from the three references listed
 below. The main RFT calculations come from Hasofer (1978) and
-Friston et al. (1994) and the non-central distribution
-calculations come from Hayasaka et al. (2007) and
-Joyce & Hayasaka (2012).
+Friston et al. (1994). Non-central RFT power analysis follows
+Hayasaka et al. (2007) and Joyce & Hayasaka (2012). The
+non-central Euler characteristic densities are implemented
+from the expected upcrossings formula (Rice 1945).
 
 REFERENCES
 
@@ -33,6 +34,9 @@ REFERENCES
   non-central random field theory. **NeuroImage** 37(3), 721-730.
 | http://dx.doi.org/10.1016/j.neuroimage.2007.06.009
 
+| Rice SO (1945). Mathematical analysis of random noise.
+  **Bell Syst Tech J** 24: 46-156.
+
 | Joyce KE, Hayasaka S (2012). Development of PowerMap: a Software Package for
   Statistical Power Calculation in Neuroimaging Studies **Neuroinform** 10: 351.
 | http://dx.doi:10.1007/s12021-012-9152-3
@@ -46,8 +50,8 @@ REFERENCES
 
 from math import pi,log,sqrt,exp
 import numpy as np
-from scipy import stats,optimize
-from scipy.special import gammaln,gamma
+from scipy import stats,optimize,integrate
+from scipy.special import gammaln,hyp1f1
 from . import geom
 
 # CONSTANTS:
@@ -65,7 +69,10 @@ def exp_ncx(df, delta, r):
 	'''
 	Non-central chi-square moments around zero
 
-	Adapted from "pm_Exp_ncX.m" in "PowerMap" (Joyce & Hayasaka 2012)
+	E[X**r] = 2**r * exp(-delta/2) * G(r + df/2) / G(df/2) * 1F1(r + df/2, df/2, delta/2)
+
+	where G is the gamma function and 1F1 is the confluent
+	hypergeometric function.
 
 	Arguments:
 
@@ -73,19 +80,10 @@ def exp_ncx(df, delta, r):
 
 	*delta* ---- non-centrality parameter (float)
 
-	*r* ---- power (positive float)
+	*r* ---- power (float greater than -df/2)
 	'''
-	tol     = eps**7.0/8
-	isum    = 0
-	iisum   = 1
-	j       = 0
-	while abs(iisum) > tol:
-		gam    = 1 / gamma(j+1)
-		d      = exp( gammaln(r+j+0.5*df)  - gammaln(j + 0.5*df)  )  * (0.5*delta)**j
-		iisum  = gam * d
-		isum  += iisum
-		j     += 1
-	mr      = 2**r  * exp(-0.5*delta) * isum
+	a       = 0.5 * df
+	mr      = 2**r * exp(-0.5*delta) * exp( gammaln(r+a) - gammaln(a) ) * hyp1f1(r+a, a, 0.5*delta)
 	return mr
 
 
@@ -94,23 +92,37 @@ def ec_density_ncf(z, v, delta):
 	'''
 	Euler characteristic density for non-central F fields.
 
-	Adapted from "pm_ECncF.m" in "PowerMap" (Joyce & Hayasaka 2012)
+	The field is F = (U/v0) / (V/v1) where U is a non-central
+	chi-square field (v0 degrees of freedom, non-centrality delta)
+	and V is a chi-square field (v1 degrees of freedom). Given V=s
+	and F=z the field derivative is Gaussian with variance
+	(v1/v0)**2 * 4*lambda*c*(1+c)/s where c = v0*z/v1 and
+	lambda = 4*log(2) is the variance of the unit-FWHM Gaussian
+	field derivative. The expected upcrossings formula then gives
+
+	ec1 = sqrt( 2*lambda*c*(1+c) / pi ) * I
+
+	where I is the integral over s of sqrt(s) * p_V(s) * p_U(c*s).
 
 	Arguments:
 
 	*z* ---- height (float)
 
-	*v* ---- degrees of freedom (float)
+	*v* ---- degrees of freedom (float, float)
 
 	*delta* ---- non-centrality parameter (float)
 	'''
 	v0,v1    = v
-	a        = FOUR_LOG2
-	b        = TWO_PI
 	c        = v0 * z / v1
-	d        = 1 + c
-	ec0      = stats.ncf.sf(z, v0, v1, delta)
-	ec1      = a**0.5 * b**-0.5 * 2 * d * c**0.5 * exp_ncx(v0+v1, delta, -0.5) * (v1/v0) * stats.ncf.pdf(z,v0,v1,delta)
+	if delta > 0:
+		ec0  = stats.ncf.sf(z, v0, v1, delta)
+		pU   = lambda x: stats.ncx2.pdf(x, v0, delta)
+	else:
+		ec0  = stats.f.sf(z, v0, v1)
+		pU   = lambda x: stats.chi2.pdf(x, v0)
+	fn       = lambda s: sqrt(s) * stats.chi2.pdf(s, v1) * pU(c*s)
+	I        = integrate.quad(fn, 0, np.inf, limit=500)[0]
+	ec1      = sqrt( 2 * FOUR_LOG2 * c * (1+c) / pi ) * I
 	return np.maximum([ec0, ec1], eps)
 
 
@@ -118,7 +130,17 @@ def ec_density_nct(z, v, delta):
 	'''
 	Euler characteristic density for non-central t fields.
 
-	Adapted from "pm_ECncT.m" in "PowerMap" (Joyce & Hayasaka 2012)
+	The field is T = (Z + delta) / sqrt(S/v) where Z is a Gaussian
+	field and S is a chi-square field (v degrees of freedom). Given
+	S=s and T=z the field derivative is Gaussian with variance
+	lambda*(v + z**2)/s where lambda = 4*log(2) is the variance of
+	the unit-FWHM Gaussian field derivative. The expected upcrossings
+	formula then gives
+
+	ec1 = sqrt( lambda*(1 + z**2/v) / (2*pi) ) * I
+
+	where I is the integral over s of p_S(s) * phi( z*sqrt(s/v) - delta )
+	and phi is the standard normal density.
 
 	Arguments:
 
@@ -128,12 +150,10 @@ def ec_density_nct(z, v, delta):
 
 	*delta* ---- non-centrality parameter (float)
 	'''
-	a    = FOUR_LOG2
-	b    = TWO_PI
-	c    = z**2 / v
-	d    = 1 + c
-	ec0  = stats.nct.sf(z, v, delta)
-	ec1  = a**0.5 * b**-0.5 * v**0.5 * d * exp_ncx(v+1, delta**2, -0.5)  * stats.nct.pdf(z, v, delta)
+	ec0  = stats.nct.sf(z, v, delta) if (delta != 0) else stats.t.sf(z, v)
+	fn   = lambda s: stats.chi2.pdf(s, v) * stats.norm.pdf( z*sqrt(s/v) - delta )
+	I    = integrate.quad(fn, 0, np.inf, limit=500)[0]
+	ec1  = sqrt( FOUR_LOG2 * (1 + z**2/v) / TWO_PI ) * I
 	return np.maximum([ec0, ec1], eps)
 
 
@@ -232,8 +252,6 @@ def ncf_sf(u, df, Q, fwhm, delta):
 	'''
 	Survival function for noncentral f fields.
 
-	Adapted from "pm_P_ncT.m" in "PowerMap" (Joyce & Hayasaka 2012)
-
 	Arguments:
 
 	*u* ---- height (float)
@@ -252,8 +270,6 @@ def ncf_sf(u, df, Q, fwhm, delta):
 def nct_sf(u, df, Q, fwhm, delta):
 	'''
 	Survival function for noncentral t fields.
-
-	Adapted from "pm_P_ncT.m" in "PowerMap" (Joyce & Hayasaka 2012)
 
 	Arguments:
 
