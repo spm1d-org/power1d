@@ -332,11 +332,6 @@ class Skewed(_Noise):
 	*alpha* ---- skewness (float or int) (default 0)
 
 
-	Modified from a StackOverflow contribution by jamesj629:
-
-	http://stackoverflow.com/questions/36200913/generate-n-random-numbers-from-a-skew-normal-distribution-using-numpy
-
-
 	Example:
 
 	.. plot::
@@ -359,11 +354,15 @@ class Skewed(_Noise):
 		self._random()
 
 	def _random(self):
-		u0    = np.random.randn(self.J, self.Q)
+		# skew-normal sample z = d*|a| + sqrt(1 - d**2)*b where a and b are
+		# independent standard normal and d = alpha / sqrt(1 + alpha**2)
+		# (Henze 1986, Scand J Stat 13: 271-275)
+		# b = s*v is standard normal because s is independent of v
+		a     = np.random.randn(self.J, self.Q)
 		v     = np.random.randn(self.J, self.Q)
-		u1    = (self.skew0*u0 + self.skew1*v) * self.sigma
-		u1[u0 < 0] *= -1
-		self.value  = self.mu + u1
+		s     = np.where(a < 0, -1.0, 1.0)
+		z     = self.skew0 * np.abs(a) + self.skew1 * s * v
+		self.value  = self.mu + self.sigma * z
 
 
 
@@ -482,11 +481,12 @@ class SmoothSkewed(_Noise):
 
 
     def _get_random_skewed_vector(self):
-        u0    = np.random.randn(self.J)
+        # see Skewed._random
+        a     = np.random.randn(self.J)
         v     = np.random.randn(self.J)
-        u1    = (self.skew0*u0 + self.skew1*v) * self.sigma
-        u1[u0 < 0] *= -1
-        return self.mu + u1
+        s     = np.where(a < 0, -1.0, 1.0)
+        z     = self.skew0 * np.abs(a) + self.skew1 * s * v
+        return self.mu + self.sigma * z
 
 
     def _random(self):
