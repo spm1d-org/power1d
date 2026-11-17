@@ -17,7 +17,7 @@ on:
         tags: [ 'v*' ]
 
 permissions:
-    contents: write                       # to create the GitHub Release
+    contents: read
 
 jobs:
     check:
@@ -50,6 +50,10 @@ jobs:
     pypi:
         needs: test
         runs-on: ubuntu-latest
+        environment: pypi
+        permissions:
+            contents: read
+            id-token: write               # PyPI Trusted Publishing
         steps:
             - name: Checkout
               uses: actions/checkout@v5
@@ -66,12 +70,12 @@ jobs:
 
             - name: Publish
               uses: pypa/gh-action-pypi-publish@v1.14.3
-              with:
-                  password: ${{ secrets.PYPI_TOKEN }}
 
     release:
         needs: pypi
         runs-on: ubuntu-latest
+        permissions:
+            contents: write               # to create the GitHub Release
         steps:
             - name: Create the GitHub Release
               env:
