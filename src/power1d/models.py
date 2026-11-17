@@ -74,24 +74,23 @@ def datasample_from_array( y ):
 
 class ProgressBar(object):
 	'''
-	A progress bar for reporting simulation progress to the terminal.
-	
-	Thank you ChristopheD!!
-	http://stackoverflow.com/questions/3160699/python-progress-bar#3160819
+	A text progress bar for reporting simulation progress to the terminal.
 	'''
 	def __init__(self, width=50, iterations=100):
-		sys.stdout.write("[Simulating%s]" % (" " * width))
+		self.width       = width
+		self.iterations  = iterations
+		self.ndots       = 0
+		self._write( '[Simulating' + width * ' ' + ']' + (width + 1) * '\b' )
+	def _write(self, s):
+		sys.stdout.write(s)
 		sys.stdout.flush()
-		sys.stdout.write("\b" * (width+1)) # return to start of line, after '['
-		self.update_interval  = float(iterations) / width
-		self.i0               = -self.update_interval
 	def destroy(self):
 		sys.stdout.write("\n\n")
 	def update(self, i):
-		if (i -self.i0) > self.update_interval:
-			sys.stdout.write(".")
-			sys.stdout.flush()
-			self.i0          += self.update_interval
+		ndots            = min(self.width, self.width * (i + 1) // self.iterations)
+		if ndots > self.ndots:
+			self._write( (ndots - self.ndots) * '.' )
+			self.ndots   = ndots
 
 
 
