@@ -5,7 +5,7 @@ License
 =====================================
 
 
-**power1d** is free but copyright software, distributed under the terms of the GNU General Public License as published by the Free Software Foundation (version 3). Further details on "copyleft" can be found at http://www.gnu.org/copyleft/. In particular, **power1d** is supplied as is. No formal support or maintenance is provided or implied.
+**power1d** is free but copyright software, distributed under the terms of the GNU General Public License as published by the Free Software Foundation (version 3 or any later version). Further details on "copyleft" can be found at http://www.gnu.org/copyleft/. In particular, **power1d** is supplied as is. No formal support or maintenance is provided or implied.
 
 ------------------------
 
