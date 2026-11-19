@@ -3,7 +3,7 @@ name            = "power1d"
 version         = "0.1.19"
 description     = "Numerical Power Estimates for One-Dimensional Continua"
 readme          = "README.md"
-requires-python = ">=3.7"
+requires-python = ">=3.10"
 license         = "GPL-3.0-or-later"
 license-files   = ["LICENSE.txt"]
 
